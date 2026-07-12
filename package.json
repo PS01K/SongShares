@@ -6,21 +6,35 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "hardhat:deploy": "npx hardhat run scripts/deploy.js --network localhost",
+    "sepolia:deploy": "npx hardhat run scripts/deploy.js --network sepolia",
+    "sepolia:redeploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network sepolia",
+    "local:redeploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network localhost",
+    "ganache:redeploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network ganache",
+    "base:redeploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network base_sepolia"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "5.0.2",
+    "dotenv": "^16.6.1",
+    "next": "14.2.35",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.35"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "chai": "^5.3.3",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "ethereum-waffle": "^4.0.10",
+    "ethers": "^5.8.0",
+    "hardhat": "^2.28.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5"
   }
 }
