@@ -1,4 +1,5 @@
 import './globals.css';
+import Navbar from '@/components/shared/Navbar';
 
 export const metadata = {
   title: 'Sound Stake',
@@ -13,7 +14,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-          {children}
+        <Navbar />
+        {children}
       </body>
     </html>
   );
