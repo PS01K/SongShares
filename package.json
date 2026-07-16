@@ -16,9 +16,13 @@
     "base:redeploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network base_sepolia"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.6",
+    "@mui/joy": "^5.0.0-beta.52",
+    "@mui/material": "^9.2.0",
     "@openzeppelin/contracts": "5.0.2",
     "@prisma/client": "^5.22.0",
     "axios": "^1.18.1",
