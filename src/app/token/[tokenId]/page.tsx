@@ -62,7 +62,7 @@ const Page = ({ params }: PageProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.post(`/api/getMintedTokensById`,{tokenId:tokenId});
+        const res = await axios.post(`/api/getMintedTokensById`, { tokenId: tokenId });
         console.log(res.data);
         setTokenData(res.data.mintedToken);
         if (res.data.mintedToken.availableToken === 0) {
@@ -86,8 +86,8 @@ const Page = ({ params }: PageProps) => {
 
       if (tokenData) {
         const { tokenId, tokenPrice } = tokenData;
-        const finalTokenPrice = tokenPrice/10000;
-        console.log("fdsafads",tokenId, finalTokenPrice);
+        const finalTokenPrice = tokenPrice / 10000;
+        console.log("fdsafads", tokenId, finalTokenPrice);
         if (Fein) {
           const tx = await Fein.buyStake(tokenId, tokensToBuy, {
             value: ethers.utils.parseEther((tokensToBuy * finalTokenPrice).toString())
@@ -133,7 +133,7 @@ const Page = ({ params }: PageProps) => {
   return (
     <div className='w-full flex min-h-screen px-72 text-white bg-[#18181a] pt-12'>
       <div className='w-1/2 px-12'>
-        <img src={`https://emerald-managerial-firefly-535.mypinata.cloud/ipfs/${tokenData.tokenThumbail}`} alt={tokenData.tokenName} className="w-full rounded-lg" />
+        <img src={`https://emerald-persistent-platypus-879.mypinata.cloud/ipfs/${tokenData.tokenThumbail}`} alt={tokenData.tokenName} className="w-full rounded-lg" />
         <div className='w-full flex mt-8'>
           <div className='w-1/2 h-24 rounded-lg bg-[#232328] gap-1 flex flex-col px-4 pt-2'>
             <p className='text-sm opacity-60'>creater_name</p>
@@ -154,7 +154,7 @@ const Page = ({ params }: PageProps) => {
             <p className=' text-lg font-semibold'>Price</p>
             <div className='flex items-center pt-4'>
               <FaEthereum className='text-lg' />
-              <p className='text-2xl ml-2'>{tokenData.tokenPrice/10000}</p>
+              <p className='text-2xl ml-2'>{tokenData.tokenPrice / 10000}</p>
             </div>
           </div>
           <div className='w-1/2 px-4 py-4 rounded-lg bg-[#232328]'>
@@ -193,7 +193,7 @@ const Page = ({ params }: PageProps) => {
               <p className='text-lg'>Total Amount</p>
               <div className='flex items-center mt-2'>
                 <FaEthereum className='text-lg' />
-                <p className='text-2xl ml-2'>{tokensToBuy * tokenData.tokenPrice/10000}</p>
+                <p className='text-2xl ml-2'>{tokensToBuy * tokenData.tokenPrice / 10000}</p>
               </div>
             </div>
             <div className='flex justify-end'>
@@ -204,7 +204,7 @@ const Page = ({ params }: PageProps) => {
           </div>
         </div>
       )}
-    </div>  
+    </div>
   );
 };
 

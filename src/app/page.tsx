@@ -42,7 +42,7 @@ export default function Home() {
       <div className="w-full h-1/2 flex flex-col px-20 mt-8">
         <h1 className="text-2xl font-semibold">Featured</h1>
         <div className="w-full mt-8 px-4 flex items-center gap-8">
-          <img src="https://emerald-managerial-firefly-535.mypinata.cloud/ipfs/QmdnWJbbNzpMREVQR235RFmnYt4oKhwHKf98CQKYzzSxe9" alt="Featured Token" className="w-80 h-72 rounded-lg object-cover" />
+          <img src="https://emerald-persistent-platypus-879.mypinata.cloud/ipfs/bafkreiao4jlqgzh7lnz277tqngj7mmb7lnwzob5irkcqigkpuotldnppwm" alt="Featured Token" className="w-80 h-72 rounded-lg object-cover" />
           <div className="flex flex-col justify-between h-72">
             <div>
               <h2 className="text-xl font-semibold">Featured</h2>
@@ -79,7 +79,7 @@ export default function Home() {
               {tokens.map((token) => (
                 <tr key={token.id} className="hover:bg-[#232328] h-16">
                   <td className="p-4 border-b border-gray-700 flex items-center gap-4">
-                    <img src={`https://emerald-managerial-firefly-535.mypinata.cloud/ipfs/${token.tokenThumbail}`} alt={token.tokenName} className="w-16 h-16 rounded-lg" />
+                    <img src={`https://emerald-persistent-platypus-879.mypinata.cloud/ipfs/${token.tokenThumbail}`} alt={token.tokenName} className="w-16 h-16 rounded-lg" />
                     <span>{token.tokenName}</span>
                   </td>
                   <td className="p-4 border-b border-gray-600 text-center">{token.availableToken}</td>

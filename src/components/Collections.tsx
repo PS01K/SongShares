@@ -9,7 +9,7 @@ const Collections = () => {
     tokenThumbail: string;
     tokenName: string;
     availableToken: number;
-    tokenId:number;
+    tokenId: number;
     tokenPrice: number;
   }
 
@@ -19,7 +19,7 @@ const Collections = () => {
   useEffect(() => {
     const fetchTokens = async () => {
       try {
-        const response = await fetch('/api/getMintedTokens',{cache: "no-store"});
+        const response = await fetch('/api/getMintedTokens', { cache: "no-store" });
         const data = await response.json();
         console.log(data)
         setTokens(data.mintedTokens);
@@ -40,7 +40,7 @@ const Collections = () => {
         {tokens.map((token) => (
           <TokenCard
             key={token.id}
-            imageUrl={`https://emerald-managerial-firefly-535.mypinata.cloud/ipfs/${token.tokenThumbail}`}
+            imageUrl={`https://emerald-persistent-platypus-879.mypinata.cloud/ipfs/${token.tokenThumbail}`}
             tokenName={token.tokenName}
             availableToken={token.availableToken}
             tokenPrice={token.tokenPrice}

@@ -69,7 +69,7 @@ const TokenSection = () => {
               {userData?.mintedTokens?.map((token) => (
                 <OwnerTokenCard
                   key={token.id}
-                  imageUrl={`https://emerald-managerial-firefly-535.mypinata.cloud/ipfs/${token.tokenThumbail}`}
+                  imageUrl={`https://emerald-persistent-platypus-879.mypinata.cloud/ipfs/${token.tokenThumbail}`}
                   tokenName={token.tokenName}
                   availableToken={token.availableToken}
                   tokenPrice={token.tokenPrice}
@@ -86,11 +86,11 @@ const TokenSection = () => {
       case 'Holdings':
         return <div className='w-full flex justify-center pt-44'>
           <p className='text-gray-500 text-lg'>No Holdings Available</p>
-      </div>;
+        </div>;
       case 'Activity':
         return <div className='w-full flex justify-center pt-44'>
           <p className='text-gray-500 text-lg'>No Recent Activity</p>
-      </div>;
+        </div>;
       default:
         return null;
     }
