@@ -8,14 +8,14 @@ export const logInUser = async (address: string):Promise<void> => {
     try {
       const userAccountAddress = await prisma.user.findUnique({
         where: {
-          accountAddress: address, // Make sure this matches the schema
+          accountAddress: address.toLowerCase(), // Normalize to lowercase
         },
       });
   
       if (!userAccountAddress) {
         await prisma.user.create({
           data: {
-          accountAddress: address,
+          accountAddress: address.toLowerCase(), // Store normalized
           },
         });
         console.log('User created successfully');

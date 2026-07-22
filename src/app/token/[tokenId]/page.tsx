@@ -101,6 +101,7 @@ const Page = ({ params }: PageProps) => {
             tokensBought: tokensToBuy,
           });
         }
+        alert('Token purchased successfully');
       }
     } catch (error) {
       console.error('Error during transaction:', error);

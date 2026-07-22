@@ -160,6 +160,9 @@ function buyStake(uint256 tokenId, uint256 number) external payable {
 
         // Distribute the revenue to participants
 
+        // Reset revenue after distribution so the cycle can repeat
+        tokenData[tokenId].revenue = 0;
+
         emit RevenueDistributed(tokenId, amountToDistribute);
     }
 
@@ -194,9 +197,11 @@ function buyStake(uint256 tokenId, uint256 number) external payable {
     // Transfer funds to the artist after all tokens are sold
     function artistTokenSales(uint256 tokenId) public payable onlyOwner {
         require(tokenData[tokenId].isReleased == true, "Song not released yet");
-        payable(tokenData[tokenId].creator).transfer(
-            tokenData[tokenId].fundsCollected
-        );
+        require(tokenData[tokenId].fundsCollected > 0, "No funds to transfer");
+        uint256 amount = tokenData[tokenId].fundsCollected;
+        // Reset fundsCollected before transfer to prevent re-entrancy
+        tokenData[tokenId].fundsCollected = 0;
+        payable(tokenData[tokenId].creator).transfer(amount);
     }
 
     function withdrawToOwner() public payable onlyOwner {
