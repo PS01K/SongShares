@@ -1,36 +1,349 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" />
+  <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity" />
+  <img src="https://img.shields.io/badge/ERC--1155-Token-3C3C3D?style=for-the-badge&logo=ethereum" />
+  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma" />
+  <img src="https://img.shields.io/badge/IPFS-Pinata-0095D5?style=for-the-badge&logo=ipfs" />
+  <img src="https://img.shields.io/badge/Deployed-Sepolia-6B47ED?style=for-the-badge&logo=ethereum" />
+</p>
 
-## Getting Started
+# 🎵 SoundStake
 
-First, run the development server:
+**A decentralized music staking platform where fans invest in artists by purchasing fractional ownership tokens, and earn a share of the song's revenue — all powered by smart contracts on Ethereum.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+> Artists tokenize their unreleased music as ERC-1155 NFTs → Fans buy fractional stakes with ETH → Song gets released → Revenue is distributed proportionally on-chain.
+
+<p align="center">
+  <a href="https://soundstake.vercel.app">🌐 Live Demo</a> •
+  <a href="https://sepolia.etherscan.io/address/0x8F3F72cf1B82230C8f9120eCF1Fd96bf1C469CDc">📜 Smart Contract on Etherscan</a>
+</p>
+
+---
+
+## 📌 Problem Statement
+
+The music industry suffers from an **opaque revenue model**. Artists receive as little as 15–20% of streaming revenue, with the rest absorbed by labels, distributors, and platforms. Fans, despite being the primary consumers, have **zero financial stake** in the music they help make successful.
+
+**SoundStake** flips this model: artists raise capital directly from their fan base by selling tokenized stakes in their music, and fans earn proportional revenue — all enforced transparently by smart contracts with no intermediaries.
+
+---
+
+## 🏗️ Architecture
+
+<!-- MANUAL STEP: Replace this section with your architecture diagram.
+     See the "How to Generate" instructions at the bottom of this README. -->
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        FRONTEND (Next.js 14)                    │
+│  Mint Page │ Collection │ Token Detail │ Portfolio │ Listen      │
+└──────┬──────────────┬──────────────────────┬────────────────────┘
+       │              │                      │
+       ▼              ▼                      ▼
+┌──────────────┐ ┌──────────────────┐ ┌──────────────────────────┐
+│  Ethereum    │ │  PostgreSQL      │ │  IPFS (Pinata)           │
+│  (Fein.sol)  │ │  (Neon DB)       │ │                          │
+│              │ │                  │ │  • Token images          │
+│  • Minting   │ │  • User profiles │ │  • Song audio files      │
+│  • Buying    │ │  • Token metadata│ │  • Thumbnails            │
+│  • Revenue   │ │  • Song metadata │ │                          │
+│  • Ownership │ │  • Purchase logs │ │  Decentralized storage   │
+└──────────────┘ └──────────────────┘ └──────────────────────────┘
+     On-Chain           Off-Chain              Decentralized
+  (Source of Truth     (Fast queries,       (Immutable media
+   for ownership        UI metadata)          hosting)
+   & financials)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Why Hybrid Architecture?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Layer | Technology | Stores | Why |
+|---|---|---|---|
+| **Blockchain** | Solidity / ERC-1155 | Ownership, balances, revenue, payouts | Trustless, immutable, verifiable |
+| **Database** | PostgreSQL (Neon) | User profiles, token names, descriptions, images | Fast reads, complex queries, UI metadata |
+| **IPFS** | Pinata | Audio files, thumbnails | Decentralized, content-addressed, permanent |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> Blockchain is the **source of truth** for all financial operations. The database is a **read-optimized mirror** for UI performance. IPFS provides **censorship-resistant media storage**.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔗 Smart Contract — `Fein.sol`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Deployed on Sepolia Testnet:** [`0x8F3F72cf1B82230C8f9120eCF1Fd96bf1C469CDc`](https://sepolia.etherscan.io/address/0x8F3F72cf1B82230C8f9120eCF1Fd96bf1C469CDc)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The `Fein` contract extends OpenZeppelin's **ERC-1155** (multi-token standard), enabling multiple token types within a single contract. Each token type represents a different song's fractional ownership.
 
-## Deploy on Vercel
+### Core Functions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Function | Access | Description |
+|---|---|---|
+| `mintNFT(supply, amount, share)` | Artist | Creates a new token type representing a song. Mints `supply` tokens at a total valuation of `amount` ETH. |
+| `buyStake(tokenId, number)` | Public | Fans purchase `number` of tokens by sending the required ETH. Automatically tracks participants and marks sold-out tokens. |
+| `releaseSong(tokenId)` | Artist | Marks a song as "released", enabling revenue operations. |
+| `addRevenueGen(tokenId)` | Admin | Injects ETH into the contract to simulate streaming revenue for a specific token. |
+| `artistTokenSales(tokenId)` | Admin | Transfers accumulated sale funds to the artist's wallet. Follows checks-effects-interactions pattern. |
+| `distributeRevenue(tokenId)` | Admin | Splits accumulated revenue between the artist and all token holders based on their `percentageShare` and fractional ownership. |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Revenue Distribution Formula
+
+```
+investorPool = revenue × percentageShare / 100
+artistPool   = revenue - investorPool
+
+For each investor:
+  payout = investorPool × (tokensHeld / totalTokenSupply)
+```
+
+---
+
+## 🗃️ Database Schema
+
+```
+User ─┬── UserInfo (1:1)      Profile name, Instagram
+      ├── Song[] (1:N)         Uploaded audio metadata
+      ├── MintedToken[] (1:N)  Tokens the user created (as artist)
+      ├── BoughtToken[] (1:N)  Tokens the user purchased (as investor)
+      ├── Like[] (1:N)         Liked songs
+      └── Follower[] (M:N)     Social following
+
+MintedToken ── BoughtToken[] (1:N)  Purchase records per token
+Song ── Like[] (1:N)                Likes per song
+```
+
+---
+
+## ✨ Features
+
+### 🎨 For Artists
+- **Mint Tokens** — Tokenize your unreleased music as ERC-1155 NFTs with configurable supply, price, and revenue share percentage.
+- **Upload Songs** — Upload audio files and thumbnails to IPFS for decentralized, permanent storage.
+- **Release Songs** — Mark songs as released to unlock revenue distribution.
+- **Portfolio Dashboard** — View all your minted tokens, release status, and manage your catalog.
+
+### 💰 For Investors (Fans)
+- **Browse Collection** — Discover available music tokens on the marketplace.
+- **Buy Stakes** — Purchase fractional ownership by sending ETH directly to the smart contract.
+- **Earn Revenue** — Receive proportional payouts when the admin distributes streaming revenue.
+- **Portfolio Tracking** — View all your purchased tokens and ownership details.
+
+### 🎧 Platform
+- **Music Player** — Stream songs directly from IPFS with a custom audio player (play/pause, volume, scrubbing).
+- **MetaMask Authentication** — Wallet-based login with JWT session management. No passwords.
+- **Admin Dashboard** — Three-step revenue lifecycle management (Token Sales → Add Revenue → Distribute).
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology | Purpose |
+|---|---|---|
+| **Frontend** | Next.js 14 (App Router) | Server-side rendering, API routes, file-based routing |
+| **Styling** | Tailwind CSS + MUI | Rapid UI development with component library |
+| **Smart Contract** | Solidity 0.8.20 | ERC-1155 token logic, revenue distribution |
+| **Contract Tooling** | Hardhat | Compilation, deployment, local blockchain |
+| **Blockchain** | Ethereum (Sepolia Testnet) | Decentralized execution layer |
+| **Database** | PostgreSQL (Neon) | Serverless, auto-scaling relational database |
+| **ORM** | Prisma | Type-safe database queries, schema management |
+| **File Storage** | IPFS via Pinata | Decentralized, content-addressed media hosting |
+| **Auth** | MetaMask + JWT | Wallet-based authentication with session tokens |
+| **State Management** | ethers.js v5 | Ethereum provider, contract interactions, BigNumber math |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- MetaMask browser extension
+- Sepolia testnet ETH ([faucet](https://sepoliafaucet.com/))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/SoundStake.git
+cd SoundStake
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Fill in DATABASE_URL, SEPOLIA_PRIVATE_KEY, and Pinata credentials
+```
+
+### Environment Variables
+
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `SEPOLIA_PRIVATE_KEY` | Wallet private key for contract deployment |
+
+### Database Setup
+
+```bash
+# Push schema to database
+npx prisma db push
+
+# Open Prisma Studio (optional, for visual DB management)
+npx prisma studio
+```
+
+### Local Development
+
+```bash
+# Start the local Hardhat blockchain
+npx hardhat node
+
+# Deploy the contract (in a new terminal)
+npm run local:redeploy
+
+# Start the Next.js dev server (in a new terminal)
+npm run dev
+```
+
+### Testnet Deployment
+
+```bash
+# Deploy to Sepolia (requires Sepolia ETH in your wallet)
+npm run sepolia:redeploy
+```
+
+---
+
+## 📁 Project Structure
+
+```
+SoundStake/
+├── contracts/
+│   └── Fein.sol                 # ERC-1155 smart contract
+├── scripts/
+│   └── deploy.js                # Hardhat deployment script
+├── prisma/
+│   └── schema.prisma            # Database schema
+├── src/
+│   ├── app/
+│   │   ├── page.tsx             # Home — featured tokens
+│   │   ├── collection/          # All available tokens
+│   │   ├── token/[tokenId]/     # Token detail + buy
+│   │   ├── mint/                # Artist: create new token
+│   │   ├── uploadsong/          # Artist: upload audio to IPFS
+│   │   ├── portfolio/[address]/ # User portfolio
+│   │   ├── listen/              # Music player
+│   │   ├── onboard/[address]/   # Profile setup
+│   │   ├── admin/               # Revenue management
+│   │   └── api/                 # API routes
+│   ├── components/
+│   │   ├── Navbar.tsx           # Navigation + wallet connect
+│   │   ├── Listen.tsx           # Audio player component
+│   │   └── cards/               # Token cards, admin cards
+│   ├── lib/
+│   │   ├── ipfs.ts              # Pinata SDK configuration
+│   │   ├── prisma.ts            # Prisma client singleton
+│   │   └── actions/             # Server actions (token, user, song)
+│   └── contract_data/           # Compiled ABI + deployed address
+├── hardhat.config.js            # Network configuration
+└── package.json
+```
+
+---
+
+## 🔄 User Flow
+
+```
+Artist                              Fan/Investor                    Admin
+  │                                      │                            │
+  ├─ Connect MetaMask                    ├─ Connect MetaMask          │
+  ├─ Complete Onboarding                 ├─ Browse /collection        │
+  ├─ Upload image to IPFS (/mint)        ├─ View token details        │
+  ├─ Mint ERC-1155 tokens on-chain       ├─ Buy stakes with ETH       │
+  ├─ Upload song to IPFS (/uploadsong)   ├─ View portfolio            │
+  ├─ Release song on-chain               ├─ Listen to music           │
+  │                                      │                            │
+  │                                      │         ┌──────────────────┤
+  │                                      │         │ 1. artistTokenSales
+  │  ◄─── Receives sale funds ───────────┼─────────┤ 2. addRevenueGen
+  │                                      │  ◄──────┤ 3. distributeRevenue
+  │                                      │         └──────────────────┘
+  │  ◄─── Receives artist share          │
+  │                                      ├─ Receives investor share
+```
+
+---
+
+## ⚠️ Known Limitations & Future Work
+
+| Limitation | Current State | Proposed Improvement |
+|---|---|---|
+| **Simulated Revenue** | Admin manually injects ETH to simulate streaming income | Integrate with a streaming oracle or off-chain revenue feed via Chainlink |
+| **Song ↔ Token Decoupled** | `Song` and `MintedToken` models have no foreign key relationship | Add `tokenId` field to `Song` schema to link audio metadata with its on-chain token |
+| **No Automated Tests** | Manual testing only | Add Hardhat tests for contract + Jest/Playwright for frontend |
+| **Hardcoded Admin Address** | Admin access is a single hardcoded wallet address | Implement OpenZeppelin's `AccessControl` for role-based permissions |
+| **No Secondary Market** | Investors cannot resell their tokens to other users | Build a peer-to-peer marketplace using ERC-1155's built-in `safeTransferFrom` |
+
+> These are intentional design decisions for the current scope. Each limitation has a clear path to resolution, demonstrating architectural awareness.
+
+---
+
+## 📜 License
+
+This project is for educational and portfolio purposes.
+
+---
+
+<!-- 
+=====================================================
+  MANUAL STEPS — DELETE THIS SECTION BEFORE PUBLISHING
+=====================================================
+
+## Screenshots (MANUAL)
+Take screenshots of these pages and add them to a /screenshots folder:
+1. Home page (with token cards)
+2. Mint page (with form filled)  
+3. Token detail page (with buy button)
+4. Portfolio page
+5. Music player (/listen)
+6. Admin dashboard (with the 3-step dialog open)
+
+Then add them to the README like:
+## 📸 Screenshots
+<p align="center">
+  <img src="./screenshots/home.png" width="45%" />
+  <img src="./screenshots/mint.png" width="45%" />
+</p>
+
+## Architecture Diagram (MANUAL — AI Shortcut)
+Use ChatGPT, Claude, or Eraser.io with this prompt:
+
+"Create a clean architecture diagram for a Web3 music staking application with these three layers:
+1. Frontend (Next.js 14) — pages: Home, Collection, Token Detail, Mint, Portfolio, Listen, Admin
+2. Blockchain (Ethereum/Solidity ERC-1155) — handles: minting, buying stakes, revenue distribution, ownership
+3. Database (PostgreSQL via Prisma) — stores: user profiles, token metadata, purchase records, song metadata  
+4. IPFS (Pinata) — stores: audio files, thumbnail images
+Show arrows for data flow between layers. Use a dark theme. Make it look professional."
+
+Tools: Eraser.io (free, generates from text), Excalidraw, or draw.io
+
+## Demo Video (MANUAL)
+Record a 2-3 minute screen recording showing:
+1. Connect wallet → Onboard
+2. Mint a token (upload image, fill form, submit)
+3. Switch to a different MetaMask account
+4. Buy stakes in the token
+5. Release the song
+6. Admin: Token Sales → Add Revenue → Distribute
+7. Show portfolio with updated balances
+
+Tools: QuickTime (Mac built-in), OBS, or Loom (free)
+Upload to YouTube as unlisted and embed: [![Demo](thumbnail.png)](https://youtube.com/...)
+
+## .env.example (CREATE THIS FILE)
+Create a .env.example file (without real credentials) for the README:
+
+```
+SEPOLIA_PRIVATE_KEY=your_wallet_private_key_here
+DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+```
+=====================================================
+-->
