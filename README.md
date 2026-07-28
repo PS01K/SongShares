@@ -7,14 +7,14 @@
   <img src="https://img.shields.io/badge/Deployed-Sepolia-6B47ED?style=for-the-badge&logo=ethereum" />
 </p>
 
-# 🎵 SoundStake
+# 🎵 SongShares
 
 **A decentralized music staking platform where fans invest in artists by purchasing fractional ownership tokens, and earn a share of the song's revenue — all powered by smart contracts on Ethereum.**
 
 > Artists tokenize their unreleased music as ERC-1155 NFTs → Fans buy fractional stakes with ETH → Song gets released → Revenue is distributed proportionally on-chain.
 
 <p align="center">
-  <a href="https://soundstake.vercel.app">🌐 Live Demo</a> •
+  <a href="https://songshares.vercel.app">🌐 Live Demo</a> •
   <a href="https://sepolia.etherscan.io/address/0x8F3F72cf1B82230C8f9120eCF1Fd96bf1C469CDc">📜 Smart Contract on Etherscan</a>
 </p>
 
@@ -24,14 +24,14 @@
 
 The music industry suffers from an **opaque revenue model**. Artists receive as little as 15–20% of streaming revenue, with the rest absorbed by labels, distributors, and platforms. Fans, despite being the primary consumers, have **zero financial stake** in the music they help make successful.
 
-**SoundStake** flips this model: artists raise capital directly from their fan base by selling tokenized stakes in their music, and fans earn proportional revenue — all enforced transparently by smart contracts with no intermediaries.
+**SongShares** flips this model: artists raise capital directly from their fan base by selling tokenized stakes in their music, and fans earn proportional revenue — all enforced transparently by smart contracts with no intermediaries.
 
 ---
 
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="./public/docs/architecture.png" alt="SoundStake Architecture" width="85%" />
+  <img src="./public/docs/architecture.png" alt="Song Shares Architecture" width="85%" />
 </p>
 
 
@@ -142,8 +142,8 @@ Song ── Like[] (1:N)                Likes per song
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/SoundStake.git
-cd SoundStake
+git clone https://github.com/YOUR_USERNAME/SongShares.git
+cd SongShares
 
 # Install dependencies
 npm install
@@ -195,7 +195,7 @@ npm run sepolia:redeploy
 ## 📁 Project Structure
 
 ```
-SoundStake/
+SongShares/
 ├── contracts/
 │   └── Fein.sol                 # ERC-1155 smart contract
 ├── scripts/
