@@ -30,30 +30,10 @@ The music industry suffers from an **opaque revenue model**. Artists receive as 
 
 ## 🏗️ Architecture
 
-<!-- MANUAL STEP: Replace this section with your architecture diagram.
-     See the "How to Generate" instructions at the bottom of this README. -->
+<p align="center">
+  <img src="./public/docs/architecture.png" alt="SoundStake Architecture" width="85%" />
+</p>
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        FRONTEND (Next.js 14)                    │
-│  Mint Page │ Collection │ Token Detail │ Portfolio │ Listen      │
-└──────┬──────────────┬──────────────────────┬────────────────────┘
-       │              │                      │
-       ▼              ▼                      ▼
-┌──────────────┐ ┌──────────────────┐ ┌──────────────────────────┐
-│  Ethereum    │ │  PostgreSQL      │ │  IPFS (Pinata)           │
-│  (Fein.sol)  │ │  (Neon DB)       │ │                          │
-│              │ │                  │ │  • Token images          │
-│  • Minting   │ │  • User profiles │ │  • Song audio files      │
-│  • Buying    │ │  • Token metadata│ │  • Thumbnails            │
-│  • Revenue   │ │  • Song metadata │ │                          │
-│  • Ownership │ │  • Purchase logs │ │  Decentralized storage   │
-└──────────────┘ └──────────────────┘ └──────────────────────────┘
-     On-Chain           Off-Chain              Decentralized
-  (Source of Truth     (Fast queries,       (Immutable media
-   for ownership        UI metadata)          hosting)
-   & financials)
-```
 
 ### Why Hybrid Architecture?
 
@@ -291,13 +271,8 @@ Artist                              Fan/Investor                    Admin
 This project is for educational and portfolio purposes.
 
 ---
-
 <!-- 
-=====================================================
-  MANUAL STEPS — DELETE THIS SECTION BEFORE PUBLISHING
-=====================================================
-
-## Screenshots (MANUAL)
+## Screenshots
 Take screenshots of these pages and add them to a /screenshots folder:
 1. Home page (with token cards)
 2. Mint page (with form filled)  
@@ -311,39 +286,5 @@ Then add them to the README like:
 <p align="center">
   <img src="./screenshots/home.png" width="45%" />
   <img src="./screenshots/mint.png" width="45%" />
-</p>
-
-## Architecture Diagram (MANUAL — AI Shortcut)
-Use ChatGPT, Claude, or Eraser.io with this prompt:
-
-"Create a clean architecture diagram for a Web3 music staking application with these three layers:
-1. Frontend (Next.js 14) — pages: Home, Collection, Token Detail, Mint, Portfolio, Listen, Admin
-2. Blockchain (Ethereum/Solidity ERC-1155) — handles: minting, buying stakes, revenue distribution, ownership
-3. Database (PostgreSQL via Prisma) — stores: user profiles, token metadata, purchase records, song metadata  
-4. IPFS (Pinata) — stores: audio files, thumbnail images
-Show arrows for data flow between layers. Use a dark theme. Make it look professional."
-
-Tools: Eraser.io (free, generates from text), Excalidraw, or draw.io
-
-## Demo Video (MANUAL)
-Record a 2-3 minute screen recording showing:
-1. Connect wallet → Onboard
-2. Mint a token (upload image, fill form, submit)
-3. Switch to a different MetaMask account
-4. Buy stakes in the token
-5. Release the song
-6. Admin: Token Sales → Add Revenue → Distribute
-7. Show portfolio with updated balances
-
-Tools: QuickTime (Mac built-in), OBS, or Loom (free)
-Upload to YouTube as unlisted and embed: [![Demo](thumbnail.png)](https://youtube.com/...)
-
-## .env.example (CREATE THIS FILE)
-Create a .env.example file (without real credentials) for the README:
-
-```
-SEPOLIA_PRIVATE_KEY=your_wallet_private_key_here
-DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
-```
-=====================================================
+</p> 
 -->

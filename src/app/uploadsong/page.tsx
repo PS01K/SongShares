@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import pinata from '@/lib/ipfs';
-import axios from 'axios';
 import { uploadSong } from '@/lib/actions/song.actions';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -229,7 +228,7 @@ const UploadSongPage = () => {
               type="submit"
               className="bg-[#5b5bd5] text-white px-4 py-2 rounded-xl"
             >
-              Confirm Release 
+              Confirm Release
             </button>
           </form>
         </div>
