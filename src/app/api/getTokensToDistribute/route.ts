@@ -1,5 +1,7 @@
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export const GET = async() => {
     try {
       const mintedTokens = await prisma.mintedToken.findMany({

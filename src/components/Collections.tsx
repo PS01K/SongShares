@@ -22,7 +22,7 @@ const Collections = () => {
         const response = await fetch('/api/getMintedTokens', { cache: "no-store" });
         const data = await response.json();
         console.log(data)
-        setTokens(data.mintedTokens);
+        setTokens(data.mintedTokens || []);
       } catch (error) {
         console.error('Error fetching minted tokens:', error);
       }

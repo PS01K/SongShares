@@ -257,7 +257,7 @@ Artist                              Fan/Investor                    Admin
 | Limitation | Current State | Proposed Improvement |
 |---|---|---|
 | **Simulated Revenue** | Admin manually injects ETH to simulate streaming income | Integrate with a streaming oracle or off-chain revenue feed via Chainlink |
-| **Song ↔ Token Decoupled** | `Song` and `MintedToken` models have no foreign key relationship | Add `tokenId` field to `Song` schema to link audio metadata with its on-chain token |
+| **Song ↔ Token Linked by Name** | `Song` and `MintedToken` are matched by naming convention (same name), not by a database foreign key. This works but is fragile — no enforced constraint prevents mismatches. | Add a `tokenId` field to the `Song` schema to create a proper relational link between audio metadata and its on-chain token |
 | **No Automated Tests** | Manual testing only | Add Hardhat tests for contract + Jest/Playwright for frontend |
 | **Hardcoded Admin Address** | Admin access is a single hardcoded wallet address | Implement OpenZeppelin's `AccessControl` for role-based permissions |
 | **No Secondary Market** | Investors cannot resell their tokens to other users | Build a peer-to-peer marketplace using ERC-1155's built-in `safeTransferFrom` |
